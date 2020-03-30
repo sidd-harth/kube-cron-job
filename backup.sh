@@ -12,7 +12,7 @@ GS_STORAGE_BUCKET=kube-mysql-dump-bucket
 DB_USER=hcl
 DB_PASS=hcl
 DB_NAME=hcldemo
-DB_HOST=mysqlservice
+DB_HOST=mysql-service
 
 VAR_2=$(date +%s) #unix time
 VAR_date_time=$(date +%Y-%d-%b-%H:%M:%S)
