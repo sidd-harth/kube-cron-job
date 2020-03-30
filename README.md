@@ -24,6 +24,7 @@ kubectl create configmap mysql-config \
 ```
 kubectl create -f mysql.yaml
 kubectl create -f cronJob.yaml
+kubectl create -f employeesApp.yaml
 ```
 
 
