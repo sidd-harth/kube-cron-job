@@ -1,0 +1,33 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: mysqldump2
+spec:
+  #schedule: "0 */2 * ? * *"
+  schedule: '*/2 * * * *'
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: mysqldump
+            image: siddharth67/google-dump:3
+            # env:
+            #   - name: ALL_DATABASES
+            #     value: 'true'
+            #   - name: DB_HOST
+            #     value: mysql-service
+            #   - name: DB_USER
+            #     value: hcl
+            #   - name: DB_PASS
+            #     value: hcl
+            imagePullPolicy: Always
+          #   volumeMounts:
+          #     - mountPath: /mysqldump
+          #       name: mysqldump
+          # volumes:
+          #   - name: mysqldump
+          #     hostPath:
+          #       path: S:\OFFICE\kubeBackup\a
+          #       type: DirectoryOrCreate
+          restartPolicy: OnFailure
