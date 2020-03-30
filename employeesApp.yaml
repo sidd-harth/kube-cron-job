@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: employees-app
+  name:  employees-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  employees-app
+  strategy: 
+    type: Rollback
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app:  employees-app
+    spec:
+      containers:
+        - name: springboot-mysql-env
+          image: 'siddharth67/employee:6'
+          env:
+            - name: KUBE_SECRET_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: username
+            - name: KUBE_SECRET_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: password
+            - name: KUBE_SECRET_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secrets
+                  key: root-password
+            - name: KUBE_CONFIG_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config
+                  key: host
+            - name: KUBE_CONFIG_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config
+                  key: port
+            - name: KUBE_CONFIG_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: mysql-config
+                  key: database
+          resources:
+            limits:
+              cpu: 200m
+            requests:
+              cpu: 100m
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 9099
+              scheme: HTTP
+            initialDelaySeconds: 180
+            timeoutSeconds: 5
+            periodSeconds: 8
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 9099
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 8
+            successThreshold: 1
+            failureThreshold: 3
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: employees-service
+  name: employees-service
+spec:
+  ports:
+  - name: employees-app
+    port: 9099
+    protocol: TCP
+    targetPort: 9099
+    nodePort: 31003
+  selector:
+    app: employees-app
+  type: NodePort
+status:
+  loadBalancer: {}
