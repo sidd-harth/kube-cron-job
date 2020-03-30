@@ -30,13 +30,19 @@ kubectl create -f employeesApp.yaml
 
 # Testing the same on DOCKER
 ### Running MySQL with HOST/Service - mysqlservice
-```docker run --name mysqlservice -e MYSQL_HOST=myss -e MYSQL_ROOT_PASSWORD=hcl -e MYSQL_USER=hcl -e MYSQL_PASSWORD=hcl -e MYSQL_DATABASE=hcldemo -d mysql:5.7```
+```
+docker run --name mysqlservice -e MYSQL_HOST=myss -e MYSQL_ROOT_PASSWORD=hcl -e MYSQL_USER=hcl -e MYSQL_PASSWORD=hcl -e MYSQL_DATABASE=hcldemo -d mysql:5.7
+```
 
 ### Docker Build the DUMP IMAGE
-````docker build -t siddharth67/dump-sql-gs .````
+```
+docker build -t siddharth67/dump-sql-gs .
+```
 
 ### Run and test
-```docker run --link mysqlservice:mysql -it siddharth67/dump-sql-gs```
+```
+docker run --link mysqlservice:mysql -it siddharth67/dump-sql-gs
+```
 
 # Google Storage 
 ![image](https://user-images.githubusercontent.com/28925814/77953001-2f516a80-72ea-11ea-807e-c1b6c7069064.png)
